@@ -1,0 +1,10 @@
+To make the attached code work, please follow the below mentioned steps: 
+
+	a. Make the static changes such as add your own account endpoint in the file. 
+	b. Add the valid certificates and keys for the things you created in your AWS IoT Core. Place those things in config file and pass the relevant name in the driver code while creating the object. 
+	c. You can change the topic name based on your requirement and implementation technique. 
+	d. After making these above changes you should also import relevant libraries to make the code work. If a library is not installed please install it and then run the code.
+	e. To execute the code you can use terminal, navigate to the directiry where file is stored and path to the keys are provided, type <python filename.py>. If all the library and files are avilable and correct you shoul see the output on console. 
+	f. Move to AWS Iot core subscribe to the topic and check the output coming there. 
+
+Here is an official AWS link we used to implement the above code: https://aws.amazon.com/premiumsupport/knowledge-center/iot-core-publish-mqtt-messages-python/
