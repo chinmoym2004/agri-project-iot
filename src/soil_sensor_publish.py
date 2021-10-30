@@ -36,18 +36,21 @@ class AWS():
     def publish(self):
         #print('Begin Publish')
         #if loopcount % 300 == 0:
-        message = {}    
-        value = float(random.normalvariate(28, 4))
-        value = round(value, 1)
-        timestamp = str(datetime.datetime.now())
-        message['deviceid'] = self.device_id
-        message['timestamp'] = timestamp
-        message['datatype'] = 'Soil Moisture'
-        message['value'] = value
-        messageJson = json.dumps(message)
-        self.myAWSIoTMQTTClient.publish(TOPIC, messageJson, 1) 
-        print("Published: '" + json.dumps(message) + "' to the topic: " + TOPIC)
-        time.sleep(0.1)
+        try:
+            message = {}    
+            value = float(random.normalvariate(28, 4))
+            value = round(value, 1)
+            timestamp = str(datetime.datetime.now())
+            message['deviceid'] = self.device_id
+            message['timestamp'] = timestamp
+            message['datatype'] = 'Soil Moisture'
+            message['value'] = value
+            messageJson = json.dumps(message)
+            self.myAWSIoTMQTTClient.publish(TOPIC, messageJson, 1) 
+            print("Published: '" + json.dumps(message) + "' to the topic: " + TOPIC)
+            time.sleep(0.1)
+        except publishTimeoutException:
+            print("Unstable connection detected. Wait for {} seconds. No data is pushed on IoT core from {} to {}.".format(DEFAULT_OPERATION_TIMEOUT_SEC, (datetime.datetime.now() - datetime.timedelta(seconds=DEFAULT_OPERATION_TIMEOUT_SEC)), datetime.datetime.now()))
         #print('Publish End')
 
     # Disconect operation for each devices
@@ -74,7 +77,7 @@ if __name__ == '__main__':
     while True:
         try :
             scheduler.enterabs(now+loopCount, 1, publish_data)
-            loopCount += 300
+            loopCount += 10
             scheduler.run()
         except KeyboardInterrupt:
             break
