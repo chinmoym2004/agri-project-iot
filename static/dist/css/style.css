@@ -1,0 +1,21 @@
+.weather_icons{
+	//background-image: url(https://openweathermap.org/img/w/04n.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: auto;
+}
+
+/*.weather_card{
+	box-shadow: 0px 0px 10px #2f2b2b;
+    border-radius: 10px;
+}*/
+.weather_card .widget-user-username
+{
+	text-transform: capitalize;
+}
+.weather_card .widget-user-image{
+	top: 48px !important;
+}
+.text-big{
+	font-size: 30px;
+}

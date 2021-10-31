@@ -1,0 +1,19 @@
+<div class="col-sm-3 col-6">
+  <div class="description-block border-right">
+    <span class="description-percentage text-success text-big" id="moister_{{farm.farm_id}}">0%</span>
+    <h5 class="description-header">Avg. Moister Level</h5>
+    <span class="description-text">{{farm.label}}</span>
+  </div>
+  <!-- /.description-block -->
+</div>
+<script type="text/javascript">
+  $(document).ready(function () {
+        const source{{farm.farm_id}} = new EventSource("/moister-report/{{farm.farm_id}}");
+        source{{farm.farm_id}}.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            console.log(data);
+            var id = "#moister_{{farm.farm_id}}"
+            $(id).text(data.value+"%");
+        }
+});
+</script>

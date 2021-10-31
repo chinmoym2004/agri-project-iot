@@ -1,0 +1,34 @@
+Farm 
+--> farm_id, name, long , lat , endpoint , certificate , private_key
+
+Device 
+--> device_id, type, farm_id ,status,created_at,deleted_at ss_ids
+
+
+create the table & insert data manualy [ better would be create a new dynamo script to create data and insert , each time we run the script it should delete all the table if exist and create new and insert data ]
+
+farm = [
+	'F1001'=>[
+		'Farm 1',
+		'F1001',
+		'28.5355',
+		'77.3910'
+		''
+	]
+]
+
+
+devices = [
+	
+	'ss1001'=>[
+		'ss1001',
+		'ss',
+		'F1001',
+		'null'
+	],
+]
+
+
+Connect MQTT with Flask graph 
+Create 
+

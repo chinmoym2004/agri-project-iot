@@ -1,0 +1,62 @@
+<!-- <div class="col-sm-3 col-6">
+  <div class="info-box mb-3 bg-default weather_card">
+    <span class="info-box-icon weather_icons" id="icon_{{farm.farm_id}}"></span>
+    <div class="info-box-content">
+      <span class="info-box-text" >0 C</span>
+      <span class="info-box-number" id="hum_{{farm.farm_id}}">10 c</span>
+      <span class="info-box-number" id="info_{{farm.farm_id}}">10 c</span>
+    </div>
+  </div>
+</div> -->
+
+<div class="col-md-3 weather_card">
+<!-- Widget: user widget style 1 -->
+<div class="card card-widget widget-user shadow">
+  <!-- Add the bg color to the header using any of the bg-* classes -->
+  <div class="widget-user-header bg-default">
+    <h3 class="widget-user-username" id="info_{{farm.farm_id}}">...</h3>
+  </div>
+  <div class="widget-user-image">
+    <img class="img-circle elevation-0 border-0" id="icon_{{farm.farm_id}}" src="{{ url_for('static', filename = 'img/loading.gif')}}" alt="icon">
+  </div>
+  <div class="card-footer pt-1">
+    <div class="row">
+      <div class="col-sm-6 border-right">
+        <div class="description-block">
+          <h5 class="description-header" id="temp_{{farm.farm_id}}">...</h5>
+          <span class="description-text">Temperature</span>
+        </div>
+        <!-- /.description-block -->
+      </div>
+
+      <div class="col-sm-6">
+        <div class="description-block">
+          <h5 class="description-header" id="hum_{{farm.farm_id}}">...</h5>
+          <span class="description-text">Humidity</span>
+        </div>
+        <!-- /.description-block -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </div>
+</div>
+<!-- /.widget-user -->
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+        const source{{farm.farm_id}} = new EventSource("/weather-report?long={{farm.long}}&lat={{farm.lat}}");
+        source{{farm.farm_id}}.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            console.log(data);
+            var id = "{{farm.farm_id}}";
+            //$("#icon_"+id).css("background-image","url(https://openweathermap.org/img/w/"+data.weather_icon_name+".png)");
+            $("#icon_"+id).attr("src","https://openweathermap.org/img/w/"+data.weather_icon_name+".png");
+            $("#temp_"+id).text(Math.round(data.temp['temp']-273.15)+' C');
+            $("#hum_"+id).text(data.humidity+"%");
+            $("#info_"+id).text(data.detailed_status);
+            
+        }
+});
+</script>
