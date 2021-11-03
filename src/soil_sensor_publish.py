@@ -77,7 +77,7 @@ if __name__ == '__main__':
     while True:
         try :
             scheduler.enterabs(now+loopCount, 1, publish_data)
-            loopCount += 10
+            loopCount += 15
             scheduler.run()
         except KeyboardInterrupt:
             break

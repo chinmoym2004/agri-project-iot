@@ -1,0 +1,3 @@
+Farm_ID,Timestamp,Sprinkler_ID,Status
+farm_01,2021-11-03 13:18:15.724839,SPR_1,ON
+farm_01,2021-11-03 13:19:02.673905,SPR_1,OFF
