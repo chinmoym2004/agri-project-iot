@@ -32,6 +32,7 @@
                   <thead>
                     <tr>
                       <th>Device ID</th>
+                      <th>Label</th>
                       <th>Farm ID</th>
                       <th>Effeciency</th>
                       <th>Added on</th>
@@ -40,17 +41,21 @@
                     </tr>
                   </thead>
                   <tbody>
+                    {% for ss in sps: %}
                     <tr>
-                      <td>SP01</td>
-                      <td>F0001</td>
-                      <td>60%</td>
+                      <td>{{ss['device_id']}}</td>
+                      <td>{{ss['label']}}</td>
+                      <td>{{ss['farm_id']}}</td>
+                      <td>75%</td>
                       <td>
                         2 Months Ago
                       </td>
                       <td><span class="badge bg-success">ON</span></td>
                       <td>3 seconds ago</td>
                     </tr>
-                    <tr>
+                    {% endfor %}
+                    
+                    <!-- <tr>
                       <td>SP010</td>
                       <td>F0001</td>
                       <td>60%</td>
@@ -119,7 +124,7 @@
                       </td>
                       <td><span class="badge bg-danger">OFF</span></td>
                       <td>--</td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
               </div>

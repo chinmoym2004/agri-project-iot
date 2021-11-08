@@ -32,3 +32,18 @@ devices = [
 Connect MQTT with Flask graph 
 Create 
 
+
+STEPS : 
+
+Should be there 
+-- Rules
+-- Roles topic device/soilsensor
+-- Rules action -> sensor_data dynamo DB table -> 
+
+Device Table
+
+sensor_data
+
+device_id
+timestamp
+value

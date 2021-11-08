@@ -4,6 +4,7 @@ import AWSIoTPythonSDK.MQTTLib as AWSIoTPyMQTT
 import random
 import datetime
 import sched
+from database import DataBase_Access_Model
 
 # LOAD ENV file 
 import os
@@ -11,8 +12,8 @@ from dotenv import load_dotenv
 from pathlib import Path  # Python 3.6+ only
 env_path = os.path.abspath(os.getcwd())+'/.env'
 load_dotenv(dotenv_path=env_path)
-
 # END LOAD ENV
+#https://console.aws.amazon.com/iot/home?region=us-east-1#/settings
 
 
 # Define ENDPOINT, TOPIC, RELATOVE DIRECTORY for CERTIFICATE AND KEYS
@@ -28,6 +29,7 @@ class AWS():
     # It will create the MQTT client for AWS using the credentials
     # Connect operation will make sure that connection is established between the device and AWS MQTT
     def __init__(self, client, certificate, private_key):
+        print("Connecting to "+client+" ...")
         self.client_id = client
         self.device_id = client
         self.cert_path = PATH_TO_CERT + "/" + certificate
@@ -41,6 +43,7 @@ class AWS():
     # Connect method to establish connection with AWS IoT core MQTT
     def _connect(self):
         self.myAWSIoTMQTTClient.connect()
+        print("Connection Established\n")
 
     # This method will publish the data on MQTT 
     # Before publishing we are confiuguring message to be published on MQTT
@@ -48,11 +51,11 @@ class AWS():
         #print('Begin Publish')
         #if loopcount % 300 == 0:
         try:
-            message = {}    
+            message = {}
             value = float(random.normalvariate(28, 4))
             value = round(value, 1)
             timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            message['deviceid'] = self.device_id
+            message['device_id'] = self.device_id
             message['timestamp'] = timestamp
             message['datatype'] = 'Soil Moisture'
             message['value'] = value
@@ -70,8 +73,8 @@ class AWS():
         self.myAWSIoTMQTTClient.disconnect()
 
 def publish_data():
-    for sensor in (soil_sensor_1, soil_sensor_2, soil_sensor_3, soil_sensor_4):
-        sensor.publish()
+    for sensor in ss_sensors:
+        ss_sensors[sensor].publish()
 
 # Main method with actual objects and method calling to publish the data in MQTT
 # Again this is a minimal example that can be extended to incopporate more devices
@@ -81,12 +84,20 @@ if __name__ == '__main__':
     loopCount = 0
     scheduler = sched.scheduler(time.time, time.sleep)
 
-    # SOil sensor device Objects
-    soil_sensor_1 = AWS("SENS_01", "SENS_1.pem.crt", "SENS_1-private.pem.key")
-    soil_sensor_2 = AWS("SENS_2", "SENS_2.pem.crt", "SENS_2-private.pem.key")
-    soil_sensor_3 = AWS("SENS_3", "SENS_3.pem.crt", "SENS_3-private.pem.key")
-    soil_sensor_4 = AWS("SENS_4", "SENS_3.pem.crt", "SENS_3-private.pem.key")
+    # PULL ALL DEVICE DATA 
+    device_table = DataBase_Access_Model("devices")
+    soilss = device_table.get_by_condition('device_type','ss')
 
+    # SOil sensor device Objects
+    ss_sensors = {};
+    # for ss in soilss:
+    #     print(ss['device_id'])
+    #     sensor = AWS(ss['device_id'], ss['device_id']+"_cert.pem", ss['device_id']+"_private.key")
+    #     sensor.publish()
+
+    for ss in soilss:
+        ss_sensors[ss['device_id']] = AWS(ss['device_id'], ss['device_id']+"_cert.pem", ss['device_id']+"_private.key")    
+    
     now = time.time()
 
     while True:

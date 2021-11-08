@@ -24,6 +24,7 @@ load_dotenv(dotenv_path=env_path)
 # CUSTOM IMPORT
 import awsconfig
 import weather
+from console.src.database import DataBase_Access_Model
 
 port = os.getenv("APP_PORT")
 
@@ -32,56 +33,62 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def index():
-    soilss = [
-        {
-            'device_id' : 'SENS_01',
-            'label' : 'SS 1',
-            'status' : 1
-        },
-        {
-            'device_id': 'SENS_2',
-            'label' : 'SS 2',
-            'status' : 1
-        },
-        {
-            'device_id': 'SENS_3',
-            'label' : 'SS 3',
-            'status' : 1
-        },
-        {
-            'device_id': 'SENS_4',
-            'label' : 'SS 4',
-            'status' : 1
-        }
-    ]
+    # soilss = [
+    #     {
+    #         'device_id' : 'SENS_01',
+    #         'label' : 'SS 1',
+    #         'status' : 1
+    #     },
+    #     {
+    #         'device_id': 'SENS_2',
+    #         'label' : 'SS 2',
+    #         'status' : 1
+    #     },
+    #     {
+    #         'device_id': 'SENS_3',
+    #         'label' : 'SS 3',
+    #         'status' : 1
+    #     },
+    #     {
+    #         'device_id': 'SENS_4',
+    #         'label' : 'SS 4',
+    #         'status' : 1
+    #     }
+    # ]
+
+    device_table = DataBase_Access_Model("devices")
+    soilss = device_table.get_by_condition('device_type','ss')
 
 
-    farms = [
-        {
-            'farm_id' : 'F001',
-            'label' : 'Farm 1',
-            'long':'78.3407965',
-            'lat': '17.4628965'
-        },
-        {
-            'farm_id': 'F002',
-            'label' : 'Farm 2',
-            'long':'80.138236',
-            'lat':'12.9298971'
-        },
-        {
-            'farm_id': 'F003',
-            'label' : 'Farm 3',
-            'long':'87.5679722',
-            'lat': '22.7224444'
-        },
-        {
-            'farm_id': 'F004',
-            'label' : 'Farm 4',
-            'long':'77.9467335',
-            'lat': '10.2087529'
-        }
-    ]
+    #scan_all_items
+    farm_table = DataBase_Access_Model("farms")
+    # farms = [
+    #     {
+    #         'farm_id' : 'F001',
+    #         'label' : 'Farm 1',
+    #         'long':'78.3407965',
+    #         'lat': '17.4628965'
+    #     },
+    #     {
+    #         'farm_id': 'F002',
+    #         'label' : 'Farm 2',
+    #         'long':'80.138236',
+    #         'lat':'12.9298971'
+    #     },
+    #     {
+    #         'farm_id': 'F003',
+    #         'label' : 'Farm 3',
+    #         'long':'87.5679722',
+    #         'lat': '22.7224444'
+    #     },
+    #     {
+    #         'farm_id': 'F004',
+    #         'label' : 'Farm 4',
+    #         'long':'77.9467335',
+    #         'lat': '10.2087529'
+    #     }
+    # ]
+    farms = farm_table.scan_all_items()
 
 
     return render_template('index.html',soilss=soilss,farms=farms)
@@ -136,18 +143,21 @@ def weather_report():
             print(data);
             #json_data = json.dumps({'value': random.random() * 100})
             yield f"data:{data}\n\n"
-            time.sleep(30)
+            time.sleep(900) #each 15 min .. we have 1000 Free call / day 
 
     return Response(getWeatherDataStream(lan,lat), mimetype='text/event-stream')
 
 @app.route('/soilsensors')
 def soilsensors():
-   #$data = jsonify(aws_controller.get_items())
-   return render_template('soilsensors.html')
+    device_table = DataBase_Access_Model("devices")
+    soilss = device_table.get_by_condition('device_type','ss')
+    return render_template('soilsensors.html',soilss=soilss)
 
 @app.route('/sprinklers')
 def sprinklers():
-   return render_template('sprinklers.html')
+    device_table = DataBase_Access_Model("devices")
+    sps = device_table.get_by_condition('device_type','sp')
+    return render_template('sprinklers.html',sps=sps)
 
 @app.route('/farms')
 def farms():
