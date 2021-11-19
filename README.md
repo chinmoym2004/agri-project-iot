@@ -21,10 +21,10 @@
   <p align="center">
     This is an IoT project that might help to jump start your next farming
     <br />
-    <a href="https://github.com/chinmoym2004/agri-project-iot"><strong>Explore the docs »</strong></a>
+    <a href="https://docs.google.com/document/d/1hoIvcIh7rrkeuNh-MPb9BX39coHZzN60gUpe6UhNaU4/view"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/chinmoym2004/agri-project-iot">View Demo</a>
+    <a href="http://localhost:81/">View Demo</a>
     ·
     <a href="https://github.com/chinmoym2004/agri-project-iot/issues">Request Feature</a>
   </p>
@@ -129,13 +129,13 @@ _Below is the steps to run the application. Move to the application directory_
 ```sh
 python3 console/src/createTables.py
 ```
-[![Create table ss][createtable-screenshot]](https://github.com/chinmoym2004/agri-project-iot/tree/advance)
+[![Create table ss][createtable-screenshot]](#)
 
 2. Once the above action success then we'll start pushing the data from the Sprinkler and publish to MQTT. Run 
 ```sh
 python3 console/src/ssPublishData.py
 ```
-[![Publish Data to the MQTT & table ss][publish-screenshot]](https://github.com/chinmoym2004/agri-project-iot/tree/advance)
+[![Publish Data to the MQTT & table ss][publish-screenshot]](#)
 
 3. Keep the above thing running for as long as you with (timeout set to 2 hrs so the program will exit after 2 hrs if you don't take any action). You should see data being pushed like this 
 
@@ -143,8 +143,13 @@ python3 console/src/ssPublishData.py
 ```sh
   python3 console/src/SprinklerCallV2.py
 ```
-[![Decission making for the Sprinkler based on the soil sensor data and weather humidity][sprinkler-screenshot]](https://github.com/chinmoym2004/agri-project-iot/tree/advance)
+[![Decission making for the Sprinkler based on the soil sensor data and weather humidity][sprinkler-screenshot]](#)
 
+5. To View the data in a dashboard , you can open a new tab and run the following 
+```sh
+  python3 app.py
+```
+This will start Python Flask application and you can then open [http://localhost:81](http://localhost:81) in your browser to see the dashboard.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -152,16 +157,16 @@ python3 console/src/ssPublishData.py
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template-new.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/badge/contibutor-5-orange
 [contributors-url]: https://github.com/chinmoym2004/agri-project-iot/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-shield]:   https://img.shields.io/github/forks/chinmoym2004/agri-project-iot
+[forks-url]: https://github.com/chinmoym2004/agri-project-iot/network/members
+[stars-shield]: https://img.shields.io/github/stars/chinmoym2004/agri-project-iot
+[stars-url]: https://github.com/chinmoym2004/agri-project-iot/stargazers
+[issues-shield]: https://img.shields.io/github/issues/chinmoym2004/agri-project-iot
 [issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
+[license-shield]: https://img.shields.io/github/license/chinmoym2004/agri-project-iot
+[license-url]: #
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/chinmoym2004
 [product-screenshot]: ss.png
