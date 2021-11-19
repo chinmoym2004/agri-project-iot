@@ -19,9 +19,9 @@ load_dotenv(dotenv_path=env_path)
 # Define ENDPOINT, TOPIC, RELATOVE DIRECTORY for CERTIFICATE AND KEYS
 ENDPOINT = os.getenv("ENDPOINT")
 PATH_TO_CERT = os.path.dirname(os.path.abspath(__file__))+'/../config'
-
 TOPIC = "iot/agritech"
-
+MIN_MOISTER_VALUE = int(os.getenv("MIN_MOISTER_VALUE"))
+MAX_MOISTER_VALUE = int(os.getenv("MAX_MOISTER_VALUE"))
 # AWS class to create number of objects (devices)
 class AWS():
     # Constructor that accepts client id that works as device id and file names for different devices
@@ -37,6 +37,7 @@ class AWS():
         self.root_path = PATH_TO_CERT + "/" + "AmazonRootCA1.pem"
         self.myAWSIoTMQTTClient = AWSIoTPyMQTT.AWSIoTMQTTClient(self.client_id)
         self.myAWSIoTMQTTClient.configureEndpoint(ENDPOINT, 8883)
+        self.myAWSIoTMQTTClient.configureMQTTOperationTimeout(7200) #2 hrs timoutout
         self.myAWSIoTMQTTClient.configureCredentials(self.root_path, self.pvt_key_path, self.cert_path)
         self._connect()
 
@@ -52,7 +53,8 @@ class AWS():
         #if loopcount % 300 == 0:
         try:
             message = {}
-            value = float(random.normalvariate(28, 4))
+            #value = float(random.normalvariate(28, 4))
+            value = random.uniform(MIN_MOISTER_VALUE,MAX_MOISTER_VALUE)
             value = round(value, 1)
             timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             message['device_id'] = self.device_id

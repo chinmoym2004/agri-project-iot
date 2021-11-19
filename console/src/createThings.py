@@ -19,9 +19,12 @@ def createThing(thingName):
 
 	global thingClient
 
-	thingResponse = thingClient.create_thing(
-	  thingName = thingName
-	)
+	try:
+		thingResponse = thingClient.create_thing(
+		  thingName = thingName
+		)
+	except Exception as e:
+		return
 
 	data = json.loads(json.dumps(thingResponse, sort_keys=False, indent=4))
 

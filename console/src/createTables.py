@@ -113,7 +113,7 @@ devices = [
         'device_id':'SS005',
         'device_type':'ss',
         'label':'Soil Sensor 5',
-        'parent_id':'SP001',
+        'parent_id':'SP002',
         'device_status':1,
         'farm_id':'F002',
         'timestamp': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -122,7 +122,7 @@ devices = [
         'device_id':'SS006',
         'device_type':'ss',
         'label':'Soil Sensor 6',
-        'parent_id':'SP001',
+        'parent_id':'SP002',
         'device_status':1,
         'farm_id':'F002',
         'timestamp': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -131,7 +131,7 @@ devices = [
         'device_id':'SS007',
         'device_type':'ss',
         'label':'Soil Sensor 7',
-        'parent_id':'SP001',
+        'parent_id':'SP002',
         'device_status':1,
         'farm_id':'F002',
         'timestamp': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -140,7 +140,7 @@ devices = [
         'device_id':'SS008',
         'device_type':'ss',
         'label':'Soil Sensor 8',
-        'parent_id':'SP001',
+        'parent_id':'SP002',
         'device_status':1,
         'farm_id':'F002',
         'timestamp': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -251,25 +251,39 @@ if __name__ == '__main__':
     farm_table = DataBase_Access_Model("farms")
     if farm_table.resource_in_use_check():
         farm_table.delete_table_and_data()
-    time.sleep(2)
+        print("Deleted \"farms\" table")
+    time.sleep(5)
     farm_table.createtable("farm_id", "label", "S", "S", 5)
+    print("Created \"farms\" table")
         
     # Create the Devices
 
     device_table = DataBase_Access_Model("devices")
     if device_table.resource_in_use_check():
         device_table.delete_table_and_data()
-    time.sleep(2)
+        print("Deleted \"devices\" table")
+    time.sleep(5)
     device_table.createtable("device_id", "farm_id", "S", "S", 5)
+    print("Created \"devices\" table")
 
 
     # Create Soil Record Table 
     soil_table = DataBase_Access_Model("soildata")
     if soil_table.resource_in_use_check():
         soil_table.delete_table_and_data()
-    time.sleep(2)
+        print("Deleted \"soildata\" table")
+    time.sleep(5)
     soil_table.createtable("device_id", "timestamp", "S", "S", 5)
-    
+    print("Created \"soildata\" table")
+
+    # Create Sprinkler Record Table 
+    soil_table = DataBase_Access_Model("sprinklerlogs")
+    if soil_table.resource_in_use_check():
+        soil_table.delete_table_and_data()
+        print("Deleted \"sprinklerlogs\" table")
+    time.sleep(5)
+    soil_table.createtable("device_id", "timestamp", "S", "S", 5) # start_time, end_time, total_water_required
+    print("Created \"sprinklerlogs\" table")
 
 
     # Insert Farm Data

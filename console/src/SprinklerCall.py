@@ -14,13 +14,21 @@ import boto3
 import threading
 from datetime import timedelta 
 
+# READ FROM ENV
+import os
+from dotenv import load_dotenv
+from pathlib import Path  # Python 3.6+ only
+env_path = os.path.abspath(os.getcwd())+'/.env'
+load_dotenv(dotenv_path=env_path)
+BUCKET_NAME=os.getenv("BUCKET_NAME")
+
 # Here we assign our aws clients/resources to use
 iot_client = boto3.client('iot',region_name ='us-east-1')
 s3 = boto3.resource(service_name = 's3')
 
-farm_table_access = DataBase_Access_Model("Farm")
-device_table_access = DataBase_Access_Model("Device")
-soil_table_access = DataBase_Access_Model("soil_sensor_data")
+farm_table_access = DataBase_Access_Model("farms")
+device_table_access = DataBase_Access_Model("devices")
+soil_table_access = DataBase_Access_Model("soildata")
 
 farm_data={}
 
@@ -53,7 +61,7 @@ def write_agri_data_tos3(data):
             if not file_exists:
                 dict_writer.writeheader()
             dict_writer.writerow({'Farm_ID': data['Farm_ID'],'Timestamp': data['Timestamp'],'Sprinkler_ID': data['Sprinkler_ID'],'Status': data['Status']})
-        s3.meta.client.upload_file(Filename = filename,Bucket="kbgl-agridata",Key=key+filename)
+        s3.meta.client.upload_file(Filename = filename,Bucket=BUCKET_NAME,Key=key+filename)
 
 def get_weather_data(user_lat, user_lon):
     one_call = mgr.one_call(lat=user_lat, lon=user_lon)
@@ -69,11 +77,11 @@ def get_farm_parameters():
         farm_data[farmdata['farm_id']]['long'] = farmdata['long']
         farm_data[farmdata['farm_id']]['devices'] = []
         farm_data[farmdata['farm_id']]['sprinkler'] = []
-        response = device_table_access.scan_table(Attr('farm_id').eq(farmdata['farm_id']) & Attr('type').eq('soil_sensor'))
+        response = device_table_access.scan_table(Attr('farm_id').eq(farmdata['farm_id']) & Attr('type').eq('ss'))
         for device_data in response:
             if device_data['device_id'] not in farm_data[farmdata['farm_id']]['devices']:
                 farm_data[farmdata['farm_id']]['devices'].append(device_data['device_id'])
-        response = device_table_access.scan_table(Attr('farm_id').eq(farmdata['farm_id']) & Attr('type').eq('sprinkler'))
+        response = device_table_access.scan_table(Attr('farm_id').eq(farmdata['farm_id']) & Attr('type').eq('sp'))
         for sprinkler_data in response:
             if sprinkler_data['device_id'] not in farm_data[farmdata['farm_id']]['sprinkler']:
                 farm_data[farmdata['farm_id']]['sprinkler'].append(sprinkler_data['device_id'])
@@ -111,6 +119,41 @@ def sprinkler_action(f_id, tmr_val):
         
         
     
+# def loop_func():
+#     timer_val = 0
+#     for i in range(len(lat)):
+#         temp, hum = get_weather_data(float(lat[i]), float(long[i]))
+#         avg_temp[i] += temp
+#         avg_hum[i] += hum
+
+#     if loopCount % 15 == 0:
+#         for i in range(len(avg_temp)):
+#             avgt = avg_temp[i]/5.0
+#             avgh = avg_hum[i]/5.0
+#             temp_diff = abs(ideal_temp - avgt)
+#             hum_diff = abs(ideal_hum - avgh)
+#             timer_val = int((temp_diff + hum_diff)/2)
+#             print(timer_val)
+#             avg_temp[i] = 0
+#             avg_hum[i] = 0 
+        
+#         print("Starting threads")
+#         t1 = threading.Thread(target=sprinkler_action, name='farm_1', args=('F001', timer_array[timer_val]))
+#         #t2 = threading.Thread(target=sprinkler_action, name='farm_2', args=('farm_02', timer_array[timer_val]))
+#         #t3 = threading.Thread(target=sprinkler_action, name='farm_3', args=('farm_03', timer_array[timer_val]))
+#         #t4 = threading.Thread(target=sprinkler_action, name='farm_4', args=('farm_04', timer_array[timer_val]))
+#         #t5 = threading.Thread(target=sprinkler_action, name='farm_5', args=('farm_05', timer_array[timer_val]))
+#         t1.start()
+#         #t2.start()
+#         #t3.start()
+#         #t4.start()
+#         #t5.start()
+#         t1.join()
+#         #t2.join()
+#         #t3.join()
+#         #t4.join()
+#         #t5.join()
+
 def loop_func():
     timer_val = 0
     for i in range(len(lat)):
@@ -125,12 +168,14 @@ def loop_func():
             temp_diff = abs(ideal_temp - avgt)
             hum_diff = abs(ideal_hum - avgh)
             timer_val = int((temp_diff + hum_diff)/2)
+            if timer_val > 9:
+                timer_val = 9
             print(timer_val)
             avg_temp[i] = 0
             avg_hum[i] = 0 
         
         print("Starting threads")
-        t1 = threading.Thread(target=sprinkler_action, name='farm_1', args=('farm_01', timer_array[timer_val]))
+        t1 = threading.Thread(target=sprinkler_action, name='farm_1', args=('F001', timer_array[timer_val]))
         #t2 = threading.Thread(target=sprinkler_action, name='farm_2', args=('farm_02', timer_array[timer_val]))
         #t3 = threading.Thread(target=sprinkler_action, name='farm_3', args=('farm_03', timer_array[timer_val]))
         #t4 = threading.Thread(target=sprinkler_action, name='farm_4', args=('farm_04', timer_array[timer_val]))
