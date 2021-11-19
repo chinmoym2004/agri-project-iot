@@ -145,7 +145,21 @@ python3 console/src/ssPublishData.py
 ```
 [![Decission making for the Sprinkler based on the soil sensor data and weather humidity][sprinkler-screenshot]](#)
 
-5. To View the data in a dashboard , you can open a new tab and run the following 
+5. To Keep the step 4 automated , we can add this in a cronjon and execute in each 5 min. edit cron file using 
+```sh
+crontab -e
+```
+And then enter this 
+
+```sh
+* 5 * * * cd /Users/chinmoy/6_IITM_GREAT_LEARNING/Final\ Project/Flask/agri-project-iot && python3 python3 console/src/SprinklerCallV2.py >> /dev/null 2>&1
+
+* 1 * * * cd /Users/chinmoy/6_IITM_GREAT_LEARNING/Final\ Project/Flask/agri-project-iot && python3 python3 console/src/SprinklerOff.py >> /dev/null 2>&1
+```
+You need to update the CD path based on your system. 
+
+
+6. To View the data in a dashboard , you can open a new tab and run the following 
 ```sh
   python3 app.py
 ```
@@ -164,7 +178,7 @@ This will start Python Flask application and you can then open [http://localhost
 [stars-shield]: https://img.shields.io/github/stars/chinmoym2004/agri-project-iot
 [stars-url]: https://github.com/chinmoym2004/agri-project-iot/stargazers
 [issues-shield]: https://img.shields.io/github/issues/chinmoym2004/agri-project-iot
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
+[issues-url]: https://github.com/chinmoym2004/agri-project-iot/issues
 [license-shield]: https://img.shields.io/github/license/chinmoym2004/agri-project-iot
 [license-url]: #
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555

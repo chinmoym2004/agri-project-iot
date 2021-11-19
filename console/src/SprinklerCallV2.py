@@ -172,8 +172,10 @@ def sprinkler_action():
                     log_data['water_duration']= str(required_time_in_sec)
                     log_data['start_time']= str(pump_start)
                     log_data['stop_time']= str(pump_stop)
-                    log_data['action_taken']= 1 # Means we have decided to irrigate 
+                    log_data['action_taken']= str(1) # Means we have decided to irrigate 
                     log_data['note']= "Location Humidity :"+str(hum)
+                    log_data['device_state']= "On"
+
                     
                     sprinklerlogs_table = DataBase_Access_Model("sprinklerlogs")
                     sprinklerlogs_table.insert_data(log_data)

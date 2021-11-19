@@ -140,6 +140,9 @@ class DataBase_Access_Model():
     
     def update_value(self, part_key, sort_key, expressionAttrVal):
         return dynamo.update_item(self._tablename,{'device_id': part_key, 'farm_id': sort_key},'set device_state = :r',{':r':expressionAttrVal,})
+
+    def update_sprinkler_status_value(self, part_key, sort_key, expressionAttrVal):
+        return dynamo.update_item(self._tablename,{'device_id': part_key, 'timestamp': sort_key},'set device_state = :r',{':r':expressionAttrVal,})
     
     def scan_all_items(self):
         return dynamo.scan_entire_table(self._tablename)
