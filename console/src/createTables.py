@@ -277,12 +277,12 @@ if __name__ == '__main__':
     print("Created \"soildata\" table")
 
     # Create Sprinkler Record Table 
-    soil_table = DataBase_Access_Model("sprinklerlogs")
-    if soil_table.resource_in_use_check():
-        soil_table.delete_table_and_data()
+    sprinklerlogs_table = DataBase_Access_Model("sprinklerlogs")
+    if sprinklerlogs_table.resource_in_use_check():
+        sprinklerlogs_table.delete_table_and_data()
         print("Deleted \"sprinklerlogs\" table")
     time.sleep(5)
-    soil_table.createtable("device_id", "timestamp", "S", "S", 5) # start_time, end_time, total_water_required
+    sprinklerlogs_table.createtable("device_id", "timestamp", "S", "S", 5) # start_time, end_time, total_water_required
     print("Created \"sprinklerlogs\" table")
 
 

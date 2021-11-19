@@ -93,110 +93,38 @@ List of things the are part of this project
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+This will show you how to run this application on your local system successfully. 
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+* AWS account 
+
+_You should have an actual AWS account or AWS Student Account to perform the following action._
+
+1. From the given .env.example create .env file in the same location 
+2. Open \~/.aws/credential file and update the details like this 
+
   ```sh
-  npm install npm@latest -g
+    [default]
+    aws_access_key_id=<UR ACCOUNT KEY>
+    aws_secret_access_key=<ACCOUNT SECRET>
+    aws_session_token=<ACCESS TOEK WITH ALL PERMISSION>
+    region=<UR REGION i.e. us-east-1 or us-east-2>
   ```
+3. In your AWS account you should have a rule under [IoT/Act](https://console.aws.amazon.com/iot/home?region=us-east-1#/rulehub) that ready data from iot/agritech MQTT topic and push to "soildata" table
 
-### Installation
+4. Get the eng point from [IoT Settings](https://console.aws.amazon.com/iot/home?region=us-east-1#/settings) and set in .env for ENDPOINT
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+5. Install all python dependency from the requirements.txt file 
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+6. Get API key from [OpenWeatherAPI](https://openweathermap.org/api) and set in .env for OPEN_WEATHER_API_KEY
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+7. You can modify the other values in .env as you wish. 
 
+### Run the application 
 
+_Below is the steps to run the application._
 
-<!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- CONTACT -->
-## Contact
-
-Chinmoy Maity - [@chinmoym2004](https://twitter.com/chinmoym2004) - chinmoym2004@ootbstudios.com
-
-Project Link: [https://github.com/chinmoym2004/agri-project-iot](https://github.com/chinmoym2004/agri-project-iot)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

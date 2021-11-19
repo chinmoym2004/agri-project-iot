@@ -30,6 +30,9 @@ MAINTAIN_MOISTER_VALUE=float(os.getenv("MAINTAIN_MOISTER_VALUE"))
 EFF_ROOT_LEN=float(os.getenv("EFF_ROOT_LEN"))
 LAND_SQM=float(os.getenv("LAND_SQM"))
 PUMP_DIS_RATE_LTR_PER_SEC=float(os.getenv("PUMP_DIS_RATE_LTR_PER_SEC"))
+OPEN_WEATHER_API_KEY=os.getenv("OPEN_WEATHER_API_KEY")
+
+EXP_HUMID=float(os.getenv("EXP_HUMID"))
 
 FC=float(os.getenv("FC"))
 PWP=float(os.getenv("PWP"))
@@ -46,7 +49,8 @@ sp_log_access = DataBase_Access_Model("sprinklerlogs")
 
 farm_data={}
 
-owm = OWM('dc57f8d11379c7f3e5a213d7c1c19712')
+# OPEN WEATHER Initialization
+owm = OWM(OPEN_WEATHER_API_KEY)
 mgr = owm.weather_manager()
 
 lat = []
@@ -130,6 +134,19 @@ def sprinkler_action():
                 # CHECK AWATHER IF ITS GOING TO RAIN - based on some percent of possibility
                 should_irrigate = 1
 
+                # CHECK FOR HUMIDITY 
+                farm_table = DataBase_Access_Model("farms")
+                farm = farm_table.get_by_condition('farm_id',ss['farm_id'])
+                hum,temp = get_weather_data(float(farm[0]['lat']), float(farm[0]['long']))
+                
+                # Temp : cucumber plants is between 60-90 degrees Fahrenheit
+                # keeping the humidity in the 60% range during the day and in the 80% range at night for cucumber
+                # In our case EXP_HUMID = 70%
+
+                if(hum > EXP_HUMID): 
+                    should_irrigate = 0
+                    print("Sprinkler:"+sp_id+" No action: Humidity is above expected range. Exp:"+str(EXP_HUMID)+" Location Humidity :"+str(hum))                    
+
                 if(should_irrigate):
                     print("Required Sprinkler Action")
                     #AWC = FC - PWP - Goal is to maintain the FC point -- This is the moister % we'll get from device and then
@@ -141,17 +158,29 @@ def sprinkler_action():
 
                     pump_start = (datetime.datetime.now())
                     pump_stop = (pump_start + timedelta(seconds=required_time_in_sec))
+                    
                     # LOG THE DETTAILS 
-                    print("ON the Sprinkler for "+str(required_time_in_sec)+' seconds')
-                    print(pump_start)
-                    print(pump_stop)
+                    print("Sprinkler:"+sp_id+" for "+str(required_time_in_sec)+' seconds')
+                    print("Sprinkler:"+sp_id+" start at:"+str(pump_start))
+                    print("Sprinkler:"+sp_id+" stop at:"+str(pump_stop))
+
                     #INSERT IN LOG TABLE
+                    log_data={}
+                    log_data['device_id']=sp_id
+                    log_data['timestamp']= datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    log_data['farm_id']= ss['farm_id']
+                    log_data['water_duration']= str(required_time_in_sec)
+                    log_data['start_time']= str(pump_start)
+                    log_data['stop_time']= str(pump_stop)
+                    log_data['action_taken']= 1 # Means we have decided to irrigate 
+                    log_data['note']= "Location Humidity :"+str(hum)
+                    
+                    sprinklerlogs_table = DataBase_Access_Model("sprinklerlogs")
+                    sprinklerlogs_table.insert_data(log_data)
 
-                else:
-                    print("There is a possibility of rain , skipping the irrigation")
-
+                    # SEND SMS OR SOME NOTIFICATION OR TRIGGER TO Actually ON pump or sprinkler NOW
             else:
-                print("Current Moister is :"+str(avg_soil)+" .. No Action Required")
+                print("MAINTAIN_MOISTER_VALUE : "+str(MAINTAIN_MOISTER_VALUE)+" Current Value :"+str(avg_soil)+", No Action Required "+sp_id)
         else:
             print("No Data point available for this device")
 
