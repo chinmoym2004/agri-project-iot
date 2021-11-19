@@ -63,7 +63,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Agri101 Screen Shot][product-screenshot]](https://example.com)
+[![Agri101 Screen Shot][product-screenshot]](https://github.com/chinmoym2004/agri-project-iot/tree/advance)
 
 Maintaining the right balance between water consumption and soil moisture management is crucial to get a good crop yield at efficient costs. We’ll develop an automatic sprinkler system based on soil and air parameters, with information coming from embedded sensors.
 
@@ -123,7 +123,27 @@ _You should have an actual AWS account or AWS Student Account to perform the fol
 
 ### Run the application 
 
-_Below is the steps to run the application._
+_Below is the steps to run the application. Move to the application directory_
+
+1. First we'll create tables & the Things in IoT from the code . To do that , run 
+```sh
+python3 console/src/createTables.py
+```
+[![Create table ss][createtable-screenshot]](https://github.com/chinmoym2004/agri-project-iot/tree/advance)
+
+2. Once the above action success then we'll start pushing the data from the Sprinkler and publish to MQTT. Run 
+```sh
+python3 console/src/ssPublishData.py
+```
+[![Publish Data to the MQTT & table ss][publish-screenshot]](https://github.com/chinmoym2004/agri-project-iot/tree/advance)
+
+3. Keep the above thing running for as long as you with (timeout set to 2 hrs so the program will exit after 2 hrs if you don't take any action). You should see data being pushed like this 
+
+4. Open a new tab and tun 
+```sh
+  python3 console/src/SprinklerCallV2.py
+```
+[![Decission making for the Sprinkler based on the soil sensor data and weather humidity][sprinkler-screenshot]](https://github.com/chinmoym2004/agri-project-iot/tree/advance)
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -145,3 +165,6 @@ _Below is the steps to run the application._
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/chinmoym2004
 [product-screenshot]: ss.png
+[createtable-screenshot]: createtable.png
+[publish-screenshot]: publish.png
+[sprinkler-screenshot]: sprinkler.png
