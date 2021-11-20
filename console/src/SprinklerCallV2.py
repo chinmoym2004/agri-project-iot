@@ -170,10 +170,11 @@ def sprinkler_action():
                     log_data['timestamp']= datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     log_data['farm_id']= ss['farm_id']
                     log_data['water_duration']= str(required_time_in_sec)
+                    log_data['water_ltr']= str(required_ltr)
                     log_data['start_time']= str(pump_start)
                     log_data['stop_time']= str(pump_stop)
                     log_data['action_taken']= str(1) # Means we have decided to irrigate 
-                    log_data['note']= "Location Humidity :"+str(hum)
+                    log_data['note']= str(hum)
                     log_data['device_state']= "On"
 
                     
