@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Index{% endblock %}
+{% block title %}Farms{% endblock %}
 
 {% block content %}
 <div class="content-wrapper">
@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Sprinlkers</h1>
+            <h1 class="m-0">Farms</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Sprinlkers</li>
+              <li class="breadcrumb-item active">Farms</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -33,29 +33,36 @@
                     <tr>
                       <th>Farm ID</th>
                       <th>Location</th>
-                      <th>Added on</th>
+                      <th>Label</th>
                       <th>Crop Type</th>
                       <th>Effective Root Depth (Inches)</th>
                       <td>Maximum Allowable Depletion (MAD)</td>
                       <th>Soil Type</th>
-                      <th>Exp. Moister Level</th>
+                      <th>Min. Moister Level</th>
+                      <th>Max. Moister Level</th>
+                      <th>Land Area</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>F0001</td>
-                      <td><a href="#" target="_blank">'78.3407965','17.4628965'</a></td>
-                      <td>
-                        2 Months Ago
-                      </td>
-                      <td>Cucumber</td>
-                      <td>24</td>
-                      <td>50%</td>
-                      <th>Silt</th>
-                      <td>3 seconds ago</td>
-                    </tr>
+                    {% for fr in farms: %}
+                      <tr>
+                        <td>{{fr['farm_id']}}</td>
+                        <td><a href="https://www.google.com/maps/@{{fr['lat']}},{{fr['long']}},15z" target="_blank">{{fr['lat']}},{{fr['long']}}</a></td>
+                        <td>
+                          {{fr['label']}}
+                        </td>
+                        <td>{{fr['crop_type']}}</td>
+                        <td>{{fr['root_depth']}}</td>
+                        <td>{{fr['mad']}}%</td>
+                        <th>{{fr['soil_type']}}</th>
+                        <td>{{fr['min_moister_leve']}}</td>
+                        <td>{{fr['max_moister_leve']}}</td>
+                        <td>{{fr['land_area']}} Sq.m</td>
+                      </tr>
+                    {% endfor %}
                     
-                    <tr>
+                    
+                    <!-- <tr>
                       <td>F0002</td>
                       <td><a href="#" target="_blank">'78.3407965','17.4628965'</a></td>
                       <td>
@@ -66,9 +73,9 @@
                       <td>50%</td>
                       <th>Silt</th>
                       <td>3 seconds ago</td>
-                    </tr>
+                    </tr> -->
 
-                    <tr>
+                    <!-- <tr>
                       <td>F0003</td>
                       <td><a href="#" target="_blank">'78.3407965','17.4628965'</a></td>
                       <td>
@@ -92,12 +99,12 @@
                       <td>50%</td>
                       <th>Silt</th>
                       <td>3 seconds ago</td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
               </div>
               <!-- /.card-body -->
-              <div class="card-footer clearfix">
+              <!-- <div class="card-footer clearfix">
                 <ul class="pagination pagination-sm m-0 float-right">
                   <li class="page-item"><a class="page-link" href="#">«</a></li>
                   <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -105,7 +112,7 @@
                   <li class="page-item"><a class="page-link" href="#">3</a></li>
                   <li class="page-item"><a class="page-link" href="#">»</a></li>
                 </ul>
-              </div>
+              </div> -->
             </div>
           </div>          
         </div>

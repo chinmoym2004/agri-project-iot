@@ -65,7 +65,7 @@
           </li>
 
 
-          <li class="nav-item {% if request.url_rule.endpoint == 'reports/*' %} menu-open {% endif %}">
+          <li class="nav-item {% if request.url_rule.endpoint == 'water_consumption' %} menu-open {% endif %}">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-line"></i>
               <p>
@@ -77,13 +77,13 @@
 
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/water-consumption" class="nav-link {% if request.url_rule.endpoint == 'water-consumption' %} active {% endif %}">
+                <a href="/water-consumption" class="nav-link {% if request.url_rule.endpoint == 'water_consumption' %} active {% endif %}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Water consumption</p>
                 </a>
               </li>
 
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="/consumption-trends" class="nav-link {% if request.url_rule.endpoint == 'consumption-trends' %} active {% endif %}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Consumption Trends</p>
@@ -95,7 +95,7 @@
                   <i class="far fa-circle nav-icon"></i>
                   <p>Water Usage Patterns</p>
                 </a>
-              </li>
+              </li> -->
 
             </ul>
           </li>

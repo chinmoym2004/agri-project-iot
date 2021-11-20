@@ -1,4 +1,4 @@
-from flask import Flask,render_template,Response,redirect, url_for, request
+from flask import Flask,render_template,Response,redirect, url_for, request,jsonify
 
 import json
 import random
@@ -9,6 +9,8 @@ import paho.mqtt.client as paho
 import matplotlib.pyplot as plt
 import os
 from queue import Queue
+import sched, time
+
 
 #QUEUE FOR THE DATA 
 QUEUE = Queue()
@@ -21,8 +23,16 @@ env_path = os.path.abspath(os.getcwd())+'/.env'
 load_dotenv(dotenv_path=env_path)
 # END LOAD ENV
 
+PATH_TO_CERT = os.path.dirname(os.path.abspath(__file__))+'/console/config'
+MQTT_TOPIC = os.getenv("MQTT_TOPIC")
+caPath = PATH_TO_CERT + "/" + 'AmazonRootCA1.pem'
+certPath = PATH_TO_CERT + "/" + 'SS009_cert.pem'
+keyPath = PATH_TO_CERT + "/" + 'SS009_private.key'
+awshost=os.getenv("ENDPOINT")
+awsport=int(os.getenv("MQTT_PORT"))
+clientId=os.getenv("MQTT_CLIENT_ID")
+
 # CUSTOM IMPORT
-import awsconfig
 import weather
 from console.src.database import DataBase_Access_Model
 
@@ -89,63 +99,60 @@ def index():
     #     }
     # ]
     farms = farm_table.scan_all_items()
-
-
     return render_template('index.html',soilss=soilss,farms=farms)
 
 
 @app.route('/chart-data')
 def chart_data():
-    def getMQTTdataFromQueue():
-        while True:
-            queueData = QUEUE.get()
-            print("Data in QUEUE");
-            print(queueData)
+    #s = sched.scheduler(time.time, time.sleep)
 
-            if queueData is None:
-                time.sleep(1)
-                continue
+    #def getMQTTdataFromQueue():
+    queueData = QUEUE.get()
+    if queueData is None:
+        print("")
+    else:
+        return jsonify(queueData)
+    #     yield f"data:{queueData}\n\n"
+    # s.enter(60, 1, getMoisterDataStream,())
+    
+    # s.enter(60, 1, getMoisterDataStream, ())
+    # s.run()
 
-            # for x in queueData:
-            #     print(x)
-            #     parse_data = json.dumps({'time': x.timestamp.strftime('%Y-%m-%d %H:%M:%S'), 'value':x.value})
-            
-            yield f"data:{queueData}\n\n"
-
-            # json_data = json.dumps(
-            #     {'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'value': random.random() * 100})
-           
-
-        # while True:
-        #     json_data = json.dumps(
-        #         {'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'value': random.random() * 100})
-        #     yield f"data:{json_data}\n\n"
-        #     time.sleep(1)
-    return Response(getMQTTdataFromQueue(), mimetype='text/event-stream')
+    # return Response(getMQTTdataFromQueue(), mimetype='text/event-stream')
 
 
 @app.route('/moister-report/<farmid>')
 def moister_report(farmid):
-    def getMoisterDataStream(farmid):
-        while True:
-            json_data = json.dumps({'value': random.randint(20,50)})
-            yield f"data:{json_data}\n\n"
-            time.sleep(30)
-    return Response(getMoisterDataStream(farmid), mimetype='text/event-stream')
+    #def getMoisterDataStream(farmid):
+        #while True:
+    json_data = json.dumps({'value': random.randint(20,35)})
+    #yield f"data:{json_data}\n\n"
+    #time.sleep(30)
+    #s.enter(60, 1, getMoisterDataStream, (farmid,))
+
+    return jsonify(json_data)
+
+    #return Response(getMoisterDataStream(farmid), mimetype='text/event-stream')
 
 @app.route('/weather-report')
 def weather_report():
     lan = float(request.args.get('long'))
     lat = float(request.args.get('lat'))
-    def getWeatherDataStream(lan,lat):
-        while True:
-            data = weather.get_weather_data(lat,lan)
-            print(data);
-            #json_data = json.dumps({'value': random.random() * 100})
-            yield f"data:{data}\n\n"
-            time.sleep(900) #each 15 min .. we have 1000 Free call / day 
 
-    return Response(getWeatherDataStream(lan,lat), mimetype='text/event-stream')
+    #def getWeatherDataStream(lan,lat):
+        #while True:
+
+    data = weather.get_weather_data(lat,lan)
+    #print(data);
+    #json_data = json.dumps({'value': random.random() * 100})
+    #yield f"data:{data}\n\n"
+    #time.sleep(900) #each 15 min .. we have 1000 Free call / day 
+    #s.enter(60, 1, getWeatherDataStream, (lan,lat,))
+
+    # s.enter(60, 1, getWeatherDataStream, (lan,lat,))
+    # s.run()
+    return jsonify(data)
+    #return Response(getWeatherDataStream(lan,lat), mimetype='text/event-stream')
 
 @app.route('/soilsensors')
 def soilsensors():
@@ -161,28 +168,50 @@ def sprinklers():
 
 @app.route('/farms')
 def farms():
-   return render_template('farms.html')
+    farm_table = DataBase_Access_Model("farms")
+    farms = farm_table.scan_all_items()
+    return render_template('farms.html',farms=farms)
 
 @app.route('/users')
 def users():
    return render_template('users.html')
 
 
+@app.route('/water-consumption')
+def water_consumption():
+   return render_template('water-consumption.html')
+
+
 # Parse and print the payload
 def message_callback(client, userdata, message):
     recv_data = json.loads(message.payload.decode('utf8').replace("'", '"'));
-    json_data = json.dumps({'timestamp': recv_data['timestamp'], 'value': recv_data['value'],'deviceid':recv_data['deviceid']})
+    json_data = json.dumps({'timestamp': recv_data['timestamp'], 'value': recv_data['value'],'device_id':recv_data['device_id']})
+    print(json_data)
     QUEUE.put(json_data)
     
 def on_connect(client, userdata, flags, rc):
     print("Successfully Connected to AWS cloud")
-    mqttc.subscribe(awsconfig.topic)
+    mqttc.subscribe(MQTT_TOPIC)
 
 if __name__ == '__main__':
-    mqttc = paho.Client(client_id = awsconfig.clientId)               
+    mqttc = paho.Client(client_id = clientId)               
     mqttc.on_message = message_callback
     mqttc.on_connect = on_connect        
-    mqttc.tls_set(awsconfig.caPath, certfile=awsconfig.certPath, keyfile=awsconfig.keyPath, cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
-    mqttc.connect(awsconfig.awshost, awsconfig.awsport, keepalive=60)     
+    mqttc.tls_set(caPath, certfile=certPath, keyfile=keyPath, cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
+    mqttc.connect(awshost, awsport, keepalive=7200)     
     mqttc.loop_start()
+
+    # loopCount = 0
+    # scheduler = sched.scheduler(time.time, time.sleep)
+    # now = time.time()
+
+    # while True:
+    #     try :
+    #         # scheduler.enterabs(now+loopCount, 1, loop_func)
+    #         # loopCount += 3
+    #         # scheduler.run()
+    #         print("In")
+    #         time.sleep(2)
+    #     except KeyboardInterrupt:
+    #         break
     app.run(host='0.0.0.0', port=port)

@@ -46,17 +46,38 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-        const source{{farm.farm_id}} = new EventSource("/weather-report?long={{farm.long}}&lat={{farm.lat}}");
-        source{{farm.farm_id}}.onmessage = function (event) {
-            const data = JSON.parse(event.data);
-            console.log(data);
-            var id = "{{farm.farm_id}}";
-            //$("#icon_"+id).css("background-image","url(https://openweathermap.org/img/w/"+data.weather_icon_name+".png)");
-            $("#icon_"+id).attr("src","https://openweathermap.org/img/w/"+data.weather_icon_name+".png");
-            $("#temp_"+id).text(Math.round(data.temp['temp']-273.15)+' C');
-            $("#hum_"+id).text(data.humidity+"%");
-            $("#info_"+id).text(data.detailed_status);
+
+      function getweatherdata(){
+          $.get("/weather-report?long={{farm.long}}&lat={{farm.lat}}",function(){
+
+          }).done(function(res){
+              const data = JSON.parse(res);
+
+              console.log(data);
+              var id = "{{farm.farm_id}}";
+              //$("#icon_"+id).css("background-image","url(https://openweathermap.org/img/w/"+data.weather_icon_name+".png)");
+              $("#icon_"+id).attr("src","https://openweathermap.org/img/w/"+data.weather_icon_name+".png");
+              $("#temp_"+id).text(Math.round(data.temp['temp']-273.15)+' C');
+              $("#hum_"+id).text(data.humidity+"%");
+              $("#info_"+id).text(data.detailed_status);
+
+          });
+      }
+
+      setInterval(getweatherdata(),15000);
+        // const source{{farm.farm_id}} = new EventSource("/weather-report?long={{farm.long}}&lat={{farm.lat}}");
+        // source{{farm.farm_id}}.onmessage = function (event) {
+        //     const data = JSON.parse(event.data);
+        //     console.log(data);
+        //     var id = "{{farm.farm_id}}";
+        //     //$("#icon_"+id).css("background-image","url(https://openweathermap.org/img/w/"+data.weather_icon_name+".png)");
+        //     $("#icon_"+id).attr("src","https://openweathermap.org/img/w/"+data.weather_icon_name+".png");
+        //     $("#temp_"+id).text(Math.round(data.temp['temp']-273.15)+' C');
+        //     $("#hum_"+id).text(data.humidity+"%");
+        //     $("#info_"+id).text(data.detailed_status);
             
-        }
+        // }
+
+      getweatherdata();
 });
 </script>

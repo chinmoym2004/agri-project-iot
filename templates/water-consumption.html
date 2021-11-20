@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Water consumption Pattern</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">water-consumption</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        
+        <div class="row">
+			<div class="col-sm-12">
+				<canvas id="waterconsumption"></canvas>
+			</div>
+		</div>
+		</div>
+	</section>
+</div>
+{% endblock %}
+
+{% block footerjs %}
+<script type="text/javascript">
+	$(function(){
+
+		new Chart(document.getElementById("waterconsumption"), {
+		    type: 'bar',
+		    data: {
+		      labels: ["F001","F001","F002", "F003", "F004"],
+		      datasets: [{
+		          label: "Water Ltr.",
+		          type: "bar",
+		          borderColor: "#8e5ea2",
+		          data: [5008,4047,6075,3034],
+		          fill: false
+		        }, {
+		          label: "Water flow time(in second)",
+		          type: "line",
+		          borderColor: "#3e95cd",
+		          data: [5493.3,4493.3,6493.3,3493.3],
+		          fill: false
+		        }
+		      ]
+		    },
+		    options: {
+		      title: {
+		        display: true,
+		        text: 'Water consumption pattern for Farms'
+		      },
+		      legend: { display: false }
+		    }
+		});
+
+	});
+</script>
+{% endblock %}

@@ -166,5 +166,171 @@
 {% endblock %}
 
 {% block footerjs %}
+<script type="text/javascript">
+  
+  function getChartdata(){
+      $.get("/chart-data",function(){
 
+      }).done(function(res){
+            const data = JSON.parse(res);
+            console.log(data);
+            device_id=data.device_id;
+
+            switch(device_id)
+            {
+              case 'SS001':
+                    if (configSS001.data.labels.length === 20) {
+                        configSS001.data.labels.shift();
+                        configSS001.data.datasets[0].data.shift();
+                    }
+                    configSS001.data.labels.push(data.timestamp);
+                    configSS001.data.datasets[0].data.push(data.value);
+                    lineChartSS001.update();
+                    break;
+              case 'SS002':
+                    if (configSS002.data.labels.length === 20) {
+                        configSS002.data.labels.shift();
+                        configSS002.data.datasets[0].data.shift();
+                    }
+                    configSS002.data.labels.push(data.timestamp);
+                    configSS002.data.datasets[0].data.push(data.value);
+                    lineChartSS002.update();
+                    break;
+              case 'SS003':
+                    if (configSS003.data.labels.length === 20) {
+                        configSS003.data.labels.shift();
+                        configSS003.data.datasets[0].data.shift();
+                    }
+                    configSS003.data.labels.push(data.timestamp);
+                    configSS003.data.datasets[0].data.push(data.value);
+                    lineChartSS003.update();
+                    break;
+              case 'SS004':
+                    if (configSS004.data.labels.length === 20) {
+                        configSS004.data.labels.shift();
+                        configSS004.data.datasets[0].data.shift();
+                    }
+                    configSS004.data.labels.push(data.timestamp);
+                    configSS004.data.datasets[0].data.push(data.value);
+                    lineChartSS004.update();
+                    break;
+
+              case 'SS005':
+                    if (configSS005.data.labels.length === 20) {
+                        configSS005.data.labels.shift();
+                        configSS005.data.datasets[0].data.shift();
+                    }
+                    configSS005.data.labels.push(data.timestamp);
+                    configSS005.data.datasets[0].data.push(data.value);
+                    lineChartSS005.update();
+                    break;
+              case 'SS006':
+                    if (configSS006.data.labels.length === 20) {
+                        configSS006.data.labels.shift();
+                        configSS006.data.datasets[0].data.shift();
+                    }
+                    configSS006.data.labels.push(data.timestamp);
+                    configSS006.data.datasets[0].data.push(data.value);
+                    lineChartSS006.update();
+                    break;
+              case 'SS007':
+                    if (configSS007.data.labels.length === 20) {
+                        configSS007.data.labels.shift();
+                        configSS007.data.datasets[0].data.shift();
+                    }
+                    configSS007.data.labels.push(data.timestamp);
+                    configSS007.data.datasets[0].data.push(data.value);
+                    lineChartSS007.update();
+                    break;
+              case 'SS008':
+                    if (configSS008.data.labels.length === 20) {
+                        configSS008.data.labels.shift();
+                        configSS008.data.datasets[0].data.shift();
+                    }
+                    configSS008.data.labels.push(data.timestamp);
+                    configSS008.data.datasets[0].data.push(data.value);
+                    lineChartSS008.update();
+                    break;
+              case 'SS0014':
+                    if (configSS0014.data.labels.length === 20) {
+                        configSS0014.data.labels.shift();
+                        configSS0014.data.datasets[0].data.shift();
+                    }
+                    configSS0014.data.labels.push(data.timestamp);
+                    configSS0014.data.datasets[0].data.push(data.value);
+                    lineChartSS0014.update();
+                    break;
+              case 'SS009':
+                    if (configSS009.data.labels.length === 20) {
+                        configSS009.data.labels.shift();
+                        configSS009.data.datasets[0].data.shift();
+                    }
+                    configSS009.data.labels.push(data.timestamp);
+                    configSS009.data.datasets[0].data.push(data.value);
+                    lineChartSS009.update();
+                    break;
+              case 'SS0010':
+                    if (configSS0010.data.labels.length === 20) {
+                        configSS0010.data.labels.shift();
+                        configSS0010.data.datasets[0].data.shift();
+                    }
+                    configSS0010.data.labels.push(data.timestamp);
+                    configSS0010.data.datasets[0].data.push(data.value);
+                    lineChartSS0010.update();
+                    break;
+              case 'SS0015':
+                    if (configSS0015.data.labels.length === 20) {
+                        configSS0015.data.labels.shift();
+                        configSS0015.data.datasets[0].data.shift();
+                    }
+                    configSS0015.data.labels.push(data.timestamp);
+                    configSS0015.data.datasets[0].data.push(data.value);
+                    lineChartSS0015.update();
+                    break;
+
+              case 'SS0016':
+                    if (configSS0016.data.labels.length === 20) {
+                        configSS0016.data.labels.shift();
+                        configSS0016.data.datasets[0].data.shift();
+                    }
+                    configSS0016.data.labels.push(data.timestamp);
+                    configSS0016.data.datasets[0].data.push(data.value);
+                    lineChartSS0016.update();
+                    break;
+              case 'SS0011':
+                    if (configSS0011.data.labels.length === 20) {
+                        configSS0011.data.labels.shift();
+                        configSS0011.data.datasets[0].data.shift();
+                    }
+                    configSS0011.data.labels.push(data.timestamp);
+                    configSS0011.data.datasets[0].data.push(data.value);
+                    lineChartSS0011.update();
+                    break;
+              case 'SS0012':
+                    if (configSS0012.data.labels.length === 20) {
+                        configSS0012.data.labels.shift();
+                        configSS0012.data.datasets[0].data.shift();
+                    }
+                    configSS0012.data.labels.push(data.timestamp);
+                    configSS0012.data.datasets[0].data.push(data.value);
+                    lineChartSS0012.update();
+                    break;
+              case 'SS0013':
+                    if (configSS0013.data.labels.length === 20) {
+                        configSS0013.data.labels.shift();
+                        configSS0013.data.datasets[0].data.shift();
+                    }
+                    configSS0013.data.labels.push(data.timestamp);
+                    configSS0013.data.datasets[0].data.push(data.value);
+                    lineChartSS0013.update();
+                    break;
+              default:
+                    break
+
+            }            
+
+      });
+  }
+  setInterval(getChartdata,1000);
+</script>
 {% endblock %}

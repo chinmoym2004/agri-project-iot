@@ -8,12 +8,23 @@
 </div>
 <script type="text/javascript">
   $(document).ready(function () {
-        const source{{farm.farm_id}} = new EventSource("/moister-report/{{farm.farm_id}}");
-        source{{farm.farm_id}}.onmessage = function (event) {
-            const data = JSON.parse(event.data);
+    // const source{{farm.farm_id}} = new EventSource();
+    // source{{farm.farm_id}}.onmessage = function (event) {
+    //     const data = JSON.parse(event.data);
+    //     console.log(data);
+    //     var id = "#moister_{{farm.farm_id}}"
+    //     $(id).text(data.value+"%");
+    // }
+    setInterval(function(){
+        $.get("/moister-report/{{farm.farm_id}}",function(){
+
+        }).done(function(res){
+            const data = JSON.parse(res);
             console.log(data);
             var id = "#moister_{{farm.farm_id}}"
             $(id).text(data.value+"%");
-        }
+        });
+
+    },2000);
 });
 </script>
